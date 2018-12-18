@@ -2,7 +2,15 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 import { storiesOf } from '@storybook/react'
 
-import FoldView from '../src/components/FoldView'
+import FoldView from '../src/components/FoldView/'
+
+const Wrapper = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	width: 100%;
+`
 
 const cardStyle = css`
 	display: flex;
@@ -62,56 +70,62 @@ class FoldViewWithWrapper extends React.Component {
 
 storiesOf('FoldView', module)
 	.add('default', () => (
-		<FoldViewWithWrapper
-			base={<Base>Base</Base>}
-			outer={<Outer>Outer</Outer>}
-			inner={<Inner>Inner</Inner>}
-		/>
+		<Wrapper>
+			<FoldViewWithWrapper
+				base={<Base>Base</Base>}
+				outer={<Outer>Outer</Outer>}
+				inner={<Inner>Inner</Inner>}
+			/>
+		</Wrapper>
 	))
 	.add('nested with cascade', () => (
-		<FoldViewWithWrapper
-			base={<Base>Base</Base>}
-			outer={<Outer>Outer</Outer>}
-			cascade
-			inner={
-				<FoldView
-					base={<Base>Inner 1 / Base 2</Base>}
-					outer={<Outer>Outer 2</Outer>}
-					inner={<Inner>Inner 2</Inner>}
-				/>
-			}
-		/>
+		<Wrapper>
+			<FoldViewWithWrapper
+				base={<Base>Base</Base>}
+				outer={<Outer>Outer</Outer>}
+				cascade
+				inner={
+					<FoldView
+						base={<Base>Inner 1 / Base 2</Base>}
+						outer={<Outer>Outer 2</Outer>}
+						inner={<Inner>Inner 2</Inner>}
+					/>
+				}
+			/>
+		</Wrapper>
 	))
 	.add('multi-nested with cascadeBlock', () => (
-		<FoldViewWithWrapper
-			base={<Base>Base 1</Base>}
-			outer={<Outer>Outer 1</Outer>}
-			cascade
-			inner={
-				<FoldView
-					base={<Base>Inner 1 / Base 2</Base>}
-					outer={<Outer>Outer 2</Outer>}
-					inner={
-						<FoldView
-							base={<Base>Inner 2 / Base3</Base>}
-							outer={<Outer>Outer 3</Outer>}
-							blockCascade
-							inner={
-								<FoldViewWithWrapper
-									base={<Base>Inner 3 / Base 4</Base>}
-									outer={<Outer>Outer 4</Outer>}
-									inner={
-										<FoldView
-											base={<Base>Inner 4 / Base 5</Base>}
-											outer={<Outer>Outer 5</Outer>}
-											inner={<Inner>Inner 5</Inner>}
-										/>
-									}
-								/>
-							}
-						/>
-					}
-				/>
-			}
-		/>
+		<Wrapper>
+			<FoldViewWithWrapper
+				base={<Base>Base 1</Base>}
+				outer={<Outer>Outer 1</Outer>}
+				cascade
+				inner={
+					<FoldView
+						base={<Base>Inner 1 / Base 2</Base>}
+						outer={<Outer>Outer 2</Outer>}
+						inner={
+							<FoldView
+								base={<Base>Inner 2 / Base3</Base>}
+								outer={<Outer>Outer 3</Outer>}
+								blockCascade
+								inner={
+									<FoldViewWithWrapper
+										base={<Base>Inner 3 / Base 4</Base>}
+										outer={<Outer>Outer 4</Outer>}
+										inner={
+											<FoldView
+												base={<Base>Inner 4 / Base 5</Base>}
+												outer={<Outer>Outer 5</Outer>}
+												inner={<Inner>Inner 5</Inner>}
+											/>
+										}
+									/>
+								}
+							/>
+						}
+					/>
+				}
+			/>
+		</Wrapper>
 	))

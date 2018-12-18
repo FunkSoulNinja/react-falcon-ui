@@ -1,28 +1,24 @@
 // @flow
-import React, { Component } from 'react'
+import React from 'react'
 import type { Node, Element } from 'react'
 import styled from 'styled-components'
 import { Motion, spring } from 'react-motion'
 
 import { getPosition, getStyle } from './utils'
 
-// TODO: Add space when opened.
-// TODO: Add shadow when opening.
-// TODO: Allow for cascading effect.
-// TODO: Pointer EVENTS! don't allow press/actions when hidden
-// TODO: Use react hooks, memoize functions increase performence
 // TODO: allow reverse motion
 // TODO: Cleanup.
 
 const Wrapper = styled.div`
 	position: relative;
-	visibility: ${props => (props.hidden ? 'hidden' : 'visible')};
 `
+
+const BaseWrapper = styled.div``
 
 const OuterWrapper = styled.div`
 	position: absolute;
-	top: 0;
 	transform-origin: bottom;
+	top: 0;
 	backface-visibility: hidden;
 `
 const InnerWrapper = styled.div`
@@ -32,79 +28,82 @@ const InnerWrapper = styled.div`
 `
 
 const defaultStyle = {
-	rotateX: 0
+	rotation: 0
 }
 
 type FoldViewProps = {
 	base: Node,
 	outer: Node,
-	inner: Node | Element<*>,
+	inner: Element<*>,
 	perspective: number | string,
 	open: void | boolean,
 	setTo: number,
 	cascade: boolean,
-	blockCascade: boolean,
-	hide: boolean
+	blockCascade: boolean
 }
 
 const springConfig = {
 	stiffness: 170,
 	damping: 26,
-	precision: 0.1
+	precision: 0.01
 }
 
-class FoldView extends Component<FoldViewProps> {
-	static defaultProps = {
-		base: <div>Base</div>,
-		outer: <div>Outer</div>,
-		inner: <div>Inner</div>,
-		perspective: 1000,
-		open: false,
-		setTo: null,
-		cascade: false,
-		blockCascade: false,
-		hide: false
+function cascade(props: FoldViewProps, position: number) {
+	return React.cloneElement(props.inner, {
+		cascade: !props.blockCascade,
+		hide: position <= 90,
+		open: !props.blockCascade && position > 175
+	})
+}
+function getInner(props: FoldViewProps, position: number) {
+	if (position <= 90) {
+		return null
 	}
-	cascade = (inner: Element<*>, position: number) => {
-		return React.cloneElement(inner, {
-			cascade: !this.props.blockCascade,
-			hide: position <= 90,
-			open: !this.props.blockCascade && position > 175
+	if (props.cascade) {
+		return cascade(props, position)
+	}
+	if (!props.blockCascade) {
+		return React.cloneElement(props.inner, {
+			open: !props.blockCascade && position > 175
 		})
 	}
-	getInner = (inner: Element<*>, position: number) => {
-		if (this.props.cascade) {
-			return this.cascade(inner, position)
-		} else if (!this.props.blockCascade) {
-			return React.cloneElement(inner, {
-				hide: position <= 90,
-				open: !this.props.blockCascade && position > 175
-			})
-		}
-		return inner
-	}
-	render() {
-		const { base, outer, inner, perspective, open, setTo, hide } = this.props
-		const position = getPosition(open, setTo)
-		return (
-			<Motion
-				defaultStyle={defaultStyle}
-				style={{ rotateX: spring(position, springConfig) }}
-			>
-				{({ rotateX }) => (
-					<Wrapper hidden={hide}>
-						{base}
-						<OuterWrapper style={getStyle(perspective, rotateX, 'outer')}>
-							{outer}
-						</OuterWrapper>
-						<InnerWrapper style={getStyle(perspective, rotateX, 'inner')}>
-							{this.getInner(inner, rotateX)}
-						</InnerWrapper>
-					</Wrapper>
-				)}
-			</Motion>
-		)
-	}
+	return props.inner
+}
+
+function FoldView(props: FoldViewProps) {
+	const { base, outer, perspective, open, setTo } = props
+	const position = getPosition(open, setTo)
+	return (
+		<Motion
+			defaultStyle={defaultStyle}
+			style={{
+				rotation: spring(position, springConfig)
+			}}
+		>
+			{({ rotation, height }) => (
+				<Wrapper>
+					<BaseWrapper>{base}</BaseWrapper>
+					<OuterWrapper style={getStyle(perspective, rotation, 'outer')}>
+						{outer}
+					</OuterWrapper>
+					<InnerWrapper style={getStyle(perspective, rotation, 'inner')}>
+						{getInner(props, rotation)}
+					</InnerWrapper>
+				</Wrapper>
+			)}
+		</Motion>
+	)
+}
+
+FoldView.defaultProps = {
+	base: <div>Base</div>,
+	outer: <div>Outer</div>,
+	inner: <div>Inner</div>,
+	perspective: 1000,
+	open: false,
+	setTo: null,
+	cascade: false,
+	blockCascade: false
 }
 
 export default FoldView

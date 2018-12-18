@@ -1,19 +1,14 @@
 // @flow
+
 export function getStyle(
 	perspective: number | string,
-	rotateX: number,
-	side: 'outer' | 'inner',
-	nested: boolean = false
-): { visibility: string, transform: string } {
-	let rotateValue = -rotateX // outer
-	let visibility: 'hidden' | 'visible' = 'visible'
+	rotation: number,
+	side: 'outer' | 'inner'
+): { transform: string } {
+	let rotateValue = -rotation // outer
 
-	if (side === 'inner') {
-		rotateValue = 180 - rotateX
-	}
-
+	if (side === 'inner') rotateValue = 180 - rotation
 	return {
-		visibility,
 		transform: `perspective(${perspective}px) rotateX(${rotateValue}deg)`
 	}
 }
