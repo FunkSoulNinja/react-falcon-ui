@@ -15,15 +15,18 @@ class Dockable extends React.Component {
 	state = {
 		pinned: false,
 		x: 0,
-		y: 0
+		y: 0,
+		z: 0
 	}
 	reset = () => {
 		if (this.state.pinned) return
 		this.setState({
 			x: 0,
-			y: 0
+			y: 0,
+			z: 0
 		})
 	}
+	setZIndex = z => this.setState({ z })
 	onDrag = (e: React.MouseEvent) => {
 		this.setState(prev => ({
 			x: prev.x + e.movementX,
@@ -35,22 +38,30 @@ class Dockable extends React.Component {
 	}
 	onPointerDown = (e: React.PointerEvent) => {
 		e.stopPropagation()
-		window.addEventListener('pointermove', this.onDrag)
-		window.addEventListener('pointerup', this.onMouseUp, { once: true })
+		e.nativeEvent.preventDefault()
+		if (e.nativeEvent.which === 1) {
+			// left click
+			this.props.setZ(this.props.index)
+			window.addEventListener('pointermove', this.onDrag)
+			window.addEventListener('pointerup', this.onMouseUp, { once: true })
+		}
 	}
 	render() {
 		return (
 			<Motion
 				style={{
 					x: spring(this.state.x, springConfig),
-					y: spring(this.state.y, springConfig)
+					y: spring(this.state.y, springConfig),
+					z: this.state.z
 				}}
 			>
-				{({ x, y }) => (
+				{({ x, y, z }) => (
 					<Wrapper
+						onContextMenu={e => e.preventDefault()}
 						onPointerDown={this.onPointerDown}
 						style={{
-							transform: `translate3d(${x}px, ${y}px, 0)`
+							transform: `translate3d(${x}px, ${y}px, 0)`,
+							zIndex: z
 						}}
 					>
 						{this.props.children}

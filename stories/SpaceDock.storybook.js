@@ -3,9 +3,9 @@ import { storiesOf } from '@storybook/react'
 
 import SpaceDock, { Item } from '../src/components/SpaceDock'
 
-class Addable extends React.Component {
+class DynamicChildComponents extends React.Component {
 	state = {
-		components: [<Item />]
+		components: []
 	}
 	handleClick = () => {
 		this.setState(prev => ({
@@ -29,4 +29,4 @@ storiesOf('SpaceDock', module)
 			<Item />
 		</SpaceDock>
 	))
-	.add('addable', () => <Addable />)
+	.add('dynamic child components', () => <DynamicChildComponents />)

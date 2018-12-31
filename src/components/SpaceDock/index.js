@@ -16,39 +16,34 @@ const Dock = styled.div`
 `
 
 export const Item = styled.div`
-	height: ${size}px;
-	width: ${size}px;
+	height: ${size - 4}px;
+	width: ${size - 4}px;
 	background-color: rgb(200, 54, 203);
+	border: 2px solid blue;
 	border-radius: 50%;
 	cursor: pointer;
 `
 
-// class SpaceDock extends React.PureComponent {
-// 	childRefs = React.Children.map(this.props.children, () => React.createRef())
-// 	dockChildren = () => {
-// 		this.childRefs.forEach(ref => ref.current.reset())
-// 	}
-// 	render() {
-// 		return (
-// 			<Dock onPointerDown={this.dockChildren}>
-// 				{React.Children.map(this.props.children, (child, i) => {
-// 					this.childRefs[i] = React.createRef()
-// 					return <Dockable ref={this.childRefs[i]}>{child}</Dockable>
-// 				})}
-// 			</Dock>
-// 		)
-// 	}
-// }
-
 function SpaceDock(props) {
-	const childRefs = React.Children.map(props.children, () => React.createRef())
+	const childRefs = React.Children.map(props.children, React.createRef)
 	function dockChildren() {
 		childRefs.forEach(ref => ref.current.reset())
 	}
+	function setZ(childIndex) {
+		childRefs.forEach((ref, i) => {
+			ref.current.setZIndex(childIndex === i ? 1 : 0)
+		})
+	}
+	const dockRef = React.createRef()
+	// console.log(dockRef.clientHeight)
 	return (
-		<Dock onPointerDown={dockChildren}>
+		<Dock onPointerDown={dockChildren} ref={dockRef}>
 			{React.Children.map(props.children, (child, i) => {
-				return <Dockable ref={childRefs[i]}>{child}</Dockable>
+				return (
+					<Dockable index={i} ref={childRefs[i]} setZ={setZ}>
+						{child}
+					</Dockable>
+				)
 			})}
 		</Dock>
 	)
