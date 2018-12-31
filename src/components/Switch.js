@@ -2,6 +2,8 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 
+const lightBlue = '#1aaff3'
+
 export class SwitchForStorybook extends Component<any, any> {
 	state = { on: false }
 	flipSwitch = () => {
@@ -36,9 +38,10 @@ const Wrapper = styled.label`
 	border-radius: 12px;
 	transition: all 0.4s ease;
 	cursor: pointer;
-	background-color: ${props => (props.on ? '#1aaff3' : '#a6aebc')};
+	background-color: ${props =>
+		props.on ? 'rgb(147, 101, 177)' : 'rgb(245, 230, 255)'};
 `
-
+// const gray = '#a6aebc'
 const SwitchInput = styled.input.attrs({ type: 'checkbox' })`
 	display: none;
 `

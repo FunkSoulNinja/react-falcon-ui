@@ -16,7 +16,7 @@ const cardStyle = css`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 50px;
+	height: 100px;
 	width: 150px;
 	border-radius: 5px;
 `
