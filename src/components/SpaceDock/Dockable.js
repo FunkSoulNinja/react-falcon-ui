@@ -57,7 +57,6 @@ class Dockable extends React.Component {
 			>
 				{({ x, y, z }) => (
 					<Wrapper
-						onContextMenu={e => e.preventDefault()}
 						onPointerDown={this.onPointerDown}
 						style={{
 							transform: `translate3d(${x}px, ${y}px, 0)`,

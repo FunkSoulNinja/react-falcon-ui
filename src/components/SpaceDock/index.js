@@ -1,30 +1,21 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Motion, spring } from 'react-motion'
 
 import Dockable from './Dockable'
 
-const size = 50
-
 const Dock = styled.div`
 	position: fixed;
-	height: ${size}px;
-	width: ${size}px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 50px;
+	width: 50px;
 	border: 2px solid black;
 	border-radius: 50%;
 	cursor: pointer;
 `
 
-export const Item = styled.div`
-	height: ${size - 4}px;
-	width: ${size - 4}px;
-	background-color: rgb(200, 54, 203);
-	border: 2px solid blue;
-	border-radius: 50%;
-	cursor: pointer;
-`
-
-function SpaceDock(props) {
+function SpaceDock({ DockComponent, ...props }) {
 	const childRefs = React.Children.map(props.children, React.createRef)
 	function dockChildren() {
 		childRefs.forEach(ref => ref.current.reset())
@@ -35,9 +26,8 @@ function SpaceDock(props) {
 		})
 	}
 	const dockRef = React.createRef()
-	// console.log(dockRef.clientHeight)
 	return (
-		<Dock onPointerDown={dockChildren} ref={dockRef}>
+		<DockComponent onPointerDown={dockChildren} ref={dockRef}>
 			{React.Children.map(props.children, (child, i) => {
 				return (
 					<Dockable index={i} ref={childRefs[i]} setZ={setZ}>
@@ -45,8 +35,12 @@ function SpaceDock(props) {
 					</Dockable>
 				)
 			})}
-		</Dock>
+		</DockComponent>
 	)
+}
+
+SpaceDock.defaultProps = {
+	DockComponent: Dock
 }
 
 export default SpaceDock

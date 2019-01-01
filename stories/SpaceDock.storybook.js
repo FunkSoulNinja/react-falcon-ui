@@ -1,7 +1,8 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
+import styled from 'styled-components'
 
-import SpaceDock, { Item } from '../src/components/SpaceDock'
+import SpaceDock from '../src/components/SpaceDock'
 
 class DynamicChildComponents extends React.Component {
 	state = {
@@ -21,6 +22,15 @@ class DynamicChildComponents extends React.Component {
 		)
 	}
 }
+
+const Item = styled.div`
+	height: 50px;
+	width: 50px;
+	background-color: rgb(200, 54, 203);
+	border: 2px solid blue;
+	border-radius: 50%;
+	cursor: pointer;
+`
 
 storiesOf('SpaceDock', module)
 	.add('default', () => (
