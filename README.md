@@ -12,33 +12,36 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.<br>
 You will also see any lint errors in the console.
 
-### `npm test`
+### `npm run storybook`
+Shows available components in the browser using storybook.
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Components
 
-### `npm run build`
+### FoldView
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+A component that folds or unfolds to show or hide content.
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+#### FoldView props
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+| name         |   type    |            default |                                                                                   description |
+| ------------ | :-------: | -----------------: | --------------------------------------------------------------------------------------------: |
+| base         | Component |  `<div>Base</div>` |                                                      The base component. Hidden while folded. |
+| inner        | Component | `<div>Inner</div>` |                                          The inner part that folds down. Hidden while folded. |
+| outer        | Component | `<div>Outer</div>` |                                           The outer part that folds down. Shown while folded. |
+| open         |  Boolean  |            `false` | Controls whether the component is opened or closed. Changing this value beings the animation. |
+| setTo        |  Number   |             `null` |                                                Controls the angle of the fold position. 0-180 |
+| perspective  |  Number   |             `1000` |                                                                                3d perspective |
+| cascade      |  Boolean  |            `false` |                                        Make nested comoponents cascade the folding animation. |
+| blockCascade |  Boolean  |            `false` |                                   If this component is nested, block the cascading animation. |
 
-### `npm run eject`
+### SpaceDock
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+A component with draggable and dockable children.
+Children elements are draggable and can be animated towards the dock component when the dock is clicked.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+#### SpaceDock props
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+| name          |     type      |                               description |
+| ------------- | :-----------: | ----------------------------------------: |
+| DockComponent |   Component   |                       The dock component. |
+| children      | React.Element | Can be a single React Element or an array |
